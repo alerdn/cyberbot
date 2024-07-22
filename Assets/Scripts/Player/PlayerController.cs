@@ -5,41 +5,113 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Layers")]
+    [Tooltip("Set this to the layer your player is on")]
+    [SerializeField] private LayerMask _playerLayer;
+
     [Header("Input")]
     [SerializeField] private InputReader _input;
 
     [Header("Components")]
     [SerializeField] private Gun _gun;
 
+    [Header("Movement")]
     [SerializeField] private float _moveSpeed = 10f;
+    [SerializeField] private float _acceleration = 100f;
+    [SerializeField] private float _deceleration = 60f;
+    [SerializeField] private float _jumpForce = 10f;
+    [SerializeField] private float _coyoteJumpTime = .15f;
 
     private Rigidbody2D _rb;
+    private CapsuleCollider2D _col;
+    private bool _cachedQueryStartInColliders;
+
+    private float _time;
+    private float _timeLeftGround;
+
+    [Header("Debug")]
+    [SerializeField] private bool _grounded;
+    [SerializeField] private bool _canCoyoteJump;
+
+    public bool CanCoyoteJump => _canCoyoteJump && _time < _timeLeftGround + _coyoteJumpTime;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _col = GetComponent<CapsuleCollider2D>();
+
+        _cachedQueryStartInColliders = Physics2D.queriesStartInColliders;
     }
 
     private void Start()
     {
         _input.ShootEvent += OnShoot;
+        _input.JumpEvent += OnJump;
     }
-
 
     private void Update()
     {
+        _time += Time.deltaTime;
         Aim();
     }
 
     private void FixedUpdate()
     {
+        CheckCollisions();
         Move();
+    }
+
+    private void CheckCollisions()
+    {
+        Physics2D.queriesStartInColliders = false;
+
+        // Ground and Ceiling
+        bool groundHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0, Vector2.down, 0.05f, ~_playerLayer);
+
+        // Landed on the Ground
+        if (!_grounded && groundHit)
+        {
+            _grounded = true;
+            _canCoyoteJump = true;
+        }
+        // Left the Ground
+        else if (_grounded && !groundHit)
+        {
+            _grounded = false;
+            _timeLeftGround = _time;
+        }
+
+        Physics2D.queriesStartInColliders = _cachedQueryStartInColliders;
     }
 
     private void Move()
     {
-        Vector2 direction = Vector2.right * _input.MovementValue * _moveSpeed;
-        _rb.velocity = new Vector2(direction.x, _rb.velocity.y);
+        float verticalModifier = 1f;
+        if (!_grounded & _rb.velocity.y <= 0)
+        {
+            verticalModifier = 1.1f;
+        }
+        float verticalVelocity = _rb.velocity.y * verticalModifier;
+
+        float horizontalVelocity;
+        if (_input.MovementValue.x == 0)
+        {
+            horizontalVelocity = Mathf.MoveTowards(_rb.velocity.x, 0f, _deceleration * Time.fixedDeltaTime);
+        }
+        else
+        {
+            horizontalVelocity = Mathf.MoveTowards(_rb.velocity.x, _input.MovementValue.x * _moveSpeed, _acceleration * Time.fixedDeltaTime);
+        }
+
+        _rb.velocity = new Vector2(horizontalVelocity, verticalVelocity);
+    }
+
+    private void OnJump()
+    {
+        if (!_grounded && !CanCoyoteJump) return;
+        _canCoyoteJump = false;
+
+        _rb.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
     }
 
     private void Aim()

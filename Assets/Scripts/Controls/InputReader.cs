@@ -9,6 +9,7 @@ using static Controls;
 public class InputReader : ScriptableObject, IPlayerActions
 {
     public event Action<bool> ShootEvent;
+    public event Action JumpEvent;
 
     public Vector2 MovementValue { get; private set; }
     public Vector2 AimValue { get; private set; }
@@ -47,5 +48,12 @@ public class InputReader : ScriptableObject, IPlayerActions
         {
             ShootEvent?.Invoke(false);
         }
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if (!context.performed) return;
+
+        JumpEvent?.Invoke();
     }
 }
