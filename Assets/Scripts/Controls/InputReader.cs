@@ -8,6 +8,7 @@ using static Controls;
 [CreateAssetMenu(fileName = "InputReader", menuName = "Controls/InputReader")]
 public class InputReader : ScriptableObject, IPlayerActions
 {
+    public event Action<bool> HealEvent;
     public event Action<bool> ShootEvent;
     public event Action JumpEvent;
 
@@ -55,5 +56,17 @@ public class InputReader : ScriptableObject, IPlayerActions
         if (!context.performed) return;
 
         JumpEvent?.Invoke();
+    }
+
+    public void OnHeal(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            HealEvent?.Invoke(true);
+        }
+        if (context.canceled)
+        {
+            HealEvent?.Invoke(false);
+        }
     }
 }

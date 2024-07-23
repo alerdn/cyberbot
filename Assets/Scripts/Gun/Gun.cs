@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,11 +38,11 @@ public class Gun : MonoBehaviour
         );
     }
 
-    public void Shoot(bool isShooting)
+    public void Shoot(bool isShooting, EnergyComponent energyComp)
     {
         if (isShooting)
         {
-            _shootRoutine ??= StartCoroutine(ShootRoutine());
+            _shootRoutine ??= StartCoroutine(ShootRoutine(energyComp));
         }
         else
         {
@@ -52,9 +53,9 @@ public class Gun : MonoBehaviour
         }
     }
 
-    private IEnumerator ShootRoutine()
+    private IEnumerator ShootRoutine(EnergyComponent energyComp)
     {
-        while (true)
+        while (energyComp.UseEnergy())
         {
             _projectilePool.Get();
             yield return new WaitForSeconds(1 / _fireRate);

@@ -2,7 +2,22 @@ fileFormatVersion: 2
 guid: 1e79d3d15359751478d0b8415d348ad8
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Idle
+    second: {fileID: 7400000, guid: e59b06f24c2d3144285631212cfd8266, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Jump
+    second: {fileID: 7400000, guid: f837d0a56d89b76479f0a68a858677f8, type: 2}
+  - first:
+      type: UnityEngine:AnimationClip
+      assembly: UnityEngine.AnimationModule
+      name: Run
+    second: {fileID: 7400000, guid: 3960e93643fcb3a4abc9aacb48be05db, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 
@@ -95,7 +110,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638572485413794100
+  platformSettingsDirtyTick: 638572595941027404
   textureAssetName: 
   singleSpriteImportData:
   - name: 

@@ -36,6 +36,10 @@ public class Projectile : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other)
     {
         _releaseCallback?.Invoke(this);
-        Debug.Log($"Collided with {other.gameObject.name}.");
+
+        if (other.gameObject.TryGetComponent<IHealth>(out IHealth EnemyHealth))
+        {
+            EnemyHealth.TakeDamage(1);
+        }
     }
 }
