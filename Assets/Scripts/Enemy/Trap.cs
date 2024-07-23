@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class Trap : MonoBehaviour, IHealth
 {
+    [SerializeField] private bool _isDamageable = false;
+
     public void TakeDamage(int damage)
     {
+        if (!_isDamageable) return;
+
         OnDeath();
     }
 
