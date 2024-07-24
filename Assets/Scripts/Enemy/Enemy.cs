@@ -63,7 +63,7 @@ public class Enemy : MonoBehaviour, IHealth
             transform.eulerAngles = new Vector3(0f, 180f, 0f);
         }
 
-        _rb.MovePosition(_rb.position + Vector2.right * direction * Time.fixedDeltaTime * _moveSpeed);
+        _rb.velocity = new Vector2(direction * _moveSpeed, _rb.velocity.y);
     }
 
     #region Health

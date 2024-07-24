@@ -165,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _detectionDistance: 10
   _attackDistance: 5
-  _moveSpeed: 10
+  _moveSpeed: 5
   _forwardCollisionDetector: {fileID: 3370067689659292020}
   _downwardCollisionDetector: {fileID: 8960825433952101564}
   _maxHealth: 10
