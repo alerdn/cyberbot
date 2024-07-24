@@ -81,7 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _crossHair: {fileID: 9097695666016811246}
   _shootPosition: {fileID: 7263635674283708407}
-  _fireRate: 2
+  _fireRate: 5
   _projectile: {fileID: 7534236017903035995, guid: 6bc829be80adea0459fa840324ceb801, type: 3}
 --- !u!1 &8478279104466898351
 GameObject:

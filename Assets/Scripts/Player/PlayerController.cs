@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -17,7 +18,7 @@ public class PlayerController : MonoBehaviour
     [Header("Components")]
     [SerializeField] private EnergyComponent _energyComp;
     [SerializeField] private Gun _gun;
-    [SerializeField] private float _gunFollowDelay = .15f;
+    [SerializeField] private float _gunFollowSpeed = 25f;
     [SerializeField] private Transform _holderPosition;
     [SerializeField] private Animator _animator;
 
@@ -38,6 +39,7 @@ public class PlayerController : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool _grounded;
     [SerializeField] private bool _canCoyoteJump;
+    [SerializeField] private float _gravityScale;
 
     public bool CanCoyoteJump => _canCoyoteJump && _time < _timeLeftGround + _coyoteJumpTime;
 
@@ -63,6 +65,8 @@ public class PlayerController : MonoBehaviour
         _input.ShootEvent += OnShoot;
         _input.JumpEvent += OnJump;
         _input.HealEvent += OnHeal;
+
+        _gravityScale = _rb.gravityScale;
     }
 
     private void OnDestroy()
@@ -83,7 +87,7 @@ public class PlayerController : MonoBehaviour
         CheckCollisions();
         Move();
 
-        _gun.transform.position = Vector3.Lerp(_gun.transform.position, _holderPosition.position, _gunFollowDelay * _time);
+        _gun.transform.position = Vector3.Lerp(_gun.transform.position, _holderPosition.position, _gunFollowSpeed * _time);
     }
 
     private void CheckCollisions()
@@ -111,12 +115,11 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        float verticalModifier = 1f;
-        if (!_grounded & _rb.velocity.y <= 0)
+        _rb.gravityScale = _gravityScale;
+        if (!_grounded && _rb.velocity.y <= 0)
         {
-            verticalModifier = 1.1f;
+            _rb.gravityScale = _gravityScale * 1.5f;
         }
-        float verticalVelocity = _rb.velocity.y * verticalModifier;
 
         float horizontalVelocity;
         if (_input.MovementValue.x == 0)
@@ -130,7 +133,7 @@ public class PlayerController : MonoBehaviour
 
         _animator.SetFloat("MovementBlend", Mathf.Abs(_input.MovementValue.x));
 
-        _rb.velocity = new Vector2(horizontalVelocity, verticalVelocity);
+        _rb.velocity = new Vector2(horizontalVelocity, _rb.velocity.y);
     }
 
     private void OnJump()

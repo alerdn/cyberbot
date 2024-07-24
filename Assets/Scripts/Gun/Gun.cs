@@ -19,7 +19,7 @@ public class Gun : MonoBehaviour
         _projectilePool = new ObjectPool<Projectile>(
             createFunc: () =>
             {
-                Projectile projectile = Instantiate(_projectile, transform);
+                Projectile projectile = Instantiate(_projectile);
                 projectile.Init(onRelease: (Projectile projectile) => _projectilePool.Release(projectile));
 
                 return projectile;
