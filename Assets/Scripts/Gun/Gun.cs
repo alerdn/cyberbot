@@ -10,6 +10,7 @@ public class Gun : MonoBehaviour
     [SerializeField] private Transform _shootPosition;
     [SerializeField][Tooltip("Tiros por segundo")] private float _fireRate = 2;
     [SerializeField] private Projectile _projectile;
+    [SerializeField] private AudioSource _shootAudio;
 
     private IObjectPool<Projectile> _projectilePool;
     private Coroutine _shootRoutine;
@@ -20,21 +21,24 @@ public class Gun : MonoBehaviour
             createFunc: () =>
             {
                 Projectile projectile = Instantiate(_projectile);
-                projectile.Init(onRelease: (Projectile projectile) => _projectilePool.Release(projectile));
+                projectile.Init(onRelease: (Projectile projectile) =>
+                {
+                    if (projectile.isActiveAndEnabled) _projectilePool.Release(projectile);
+                });
 
                 return projectile;
             }, actionOnGet: (Projectile projectile) =>
-            {
-                projectile.gameObject.SetActive(true);
-                projectile.Launch(_shootPosition.position, transform.rotation);
+                    {
+                        projectile.gameObject.SetActive(true);
+                        projectile.Launch(_shootPosition.position, transform.rotation);
 
-            }, actionOnRelease: (Projectile projectile) =>
-            {
-                projectile.gameObject.SetActive(false);
-            }, actionOnDestroy: (Projectile projectile) =>
-            {
-                Destroy(projectile.gameObject);
-            }, collectionCheck: true, defaultCapacity: 50, maxSize: 100
+                    }, actionOnRelease: (Projectile projectile) =>
+                    {
+                        projectile.gameObject.SetActive(false);
+                    }, actionOnDestroy: (Projectile projectile) =>
+                    {
+                        Destroy(projectile.gameObject);
+                    }, collectionCheck: true, defaultCapacity: 50, maxSize: 100
         );
     }
 
@@ -58,6 +62,7 @@ public class Gun : MonoBehaviour
         while (energyComp.UseEnergy())
         {
             _projectilePool.Get();
+            _shootAudio.Play();
             yield return new WaitForSeconds(1 / _fireRate);
         }
     }

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    [SerializeField] private int _damage = 1;
     [SerializeField] private float _speed = 1f;
     [SerializeField] private float _lifeTime = 5f;
 
@@ -39,7 +40,7 @@ public class Projectile : MonoBehaviour
 
         if (other.gameObject.TryGetComponent<IHealth>(out IHealth EnemyHealth))
         {
-            EnemyHealth.TakeDamage(1);
+            EnemyHealth.TakeDamage(_damage);
         }
     }
 }

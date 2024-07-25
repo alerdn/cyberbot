@@ -1,4 +1,6 @@
 using System.Collections;
+using DG.Tweening;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,16 +43,25 @@ public class EnergyComponent : MonoBehaviour, IHealth
     [SerializeField] private Image _lifeBarImage;
     [SerializeField] private Image _energyBarImage;
     [SerializeField] private Image _shieldBarImage;
+    [SerializeField] private Image _shieldIcon;
+    [SerializeField] private TMP_Text _shieldCooldownText;
 
     [Header("Stats")]
     [SerializeField] private int _maxHealth;
     [SerializeField] private int _maxEnergy;
     [SerializeField] private int _maxShield;
     [SerializeField] private float _healingRate = 10f;
+    [SerializeField] private FlashOnHit _flashEffect;
 
     [Header("Shield")]
+    [SerializeField] private SpriteRenderer _shieldRenderer;
     [SerializeField] private int _shieldRestorationMultiplier = 10;
+    [SerializeField] private float _shieldDuration;
     [SerializeField] private float _shieldCoolDown;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource _shieldAudio;
+    [SerializeField] private AudioSource _hitAudio;
 
     [Header("Debug")]
     [SerializeField] private int _currentHealth;
@@ -58,8 +69,8 @@ public class EnergyComponent : MonoBehaviour, IHealth
     [SerializeField] private int _currentShield;
 
     private Coroutine _healRoutine;
-    private Coroutine _shieldRoutine;
     private bool _canActivateShield = true;
+    private Coroutine _shieldRoutine;
 
     private void Start()
     {
@@ -87,12 +98,14 @@ public class EnergyComponent : MonoBehaviour, IHealth
             // Shield entra em cooldown
             if (CurrentShield == 0)
             {
-                StartCoroutine(ShieldCooldownRoutine());
+                DeactiveShield();
             }
 
             return;
         }
 
+        _flashEffect.Flash();
+        _hitAudio.Play();
         CurrentHealth = Mathf.Max(CurrentHealth - damage, 0);
         UpdateUI();
 
@@ -167,13 +180,40 @@ public class EnergyComponent : MonoBehaviour, IHealth
         if (_canActivateShield)
         {
             _canActivateShield = false;
+            _shieldRoutine = StartCoroutine(ShieldRoutine());
             CurrentShield = _maxShield;
+            _shieldRenderer.enabled = true;
+            _shieldAudio.Play();
+            _shieldIcon.enabled = true;
         }
+    }
+
+    private void DeactiveShield()
+    {
+        CurrentShield = 0;
+        if (_shieldRoutine != null)
+        {
+            StopCoroutine(_shieldRoutine);
+            _shieldRoutine = null;
+        }
+        _shieldAudio.Stop();
+        _shieldRenderer.enabled = false;
+        _shieldIcon.enabled = false;
+        StartCoroutine(ShieldCooldownRoutine());
+    }
+
+    private IEnumerator ShieldRoutine()
+    {
+        yield return new WaitForSeconds(_shieldDuration);
+        if (IsShieldActivated)
+            DeactiveShield();
     }
 
     private IEnumerator ShieldCooldownRoutine()
     {
-        yield return new WaitForSeconds(_shieldCoolDown);
+        _shieldCooldownText.text = _shieldCoolDown.ToString();
+        yield return DOTween.To(() => int.Parse(_shieldCooldownText.text), (v) => _shieldCooldownText.text = v.ToString(), 0, _shieldCoolDown).WaitForCompletion();
+        _shieldCooldownText.text = "Q";
         _canActivateShield = true;
     }
 

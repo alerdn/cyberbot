@@ -7,7 +7,6 @@ public class Enemy : MonoBehaviour, IHealth
 {
     [Header("Behaviour")]
     [SerializeField] private float _detectionDistance = 10f;
-    [SerializeField] private float _attackDistance = 5f;
     [SerializeField] private float _moveSpeed = 1f;
     [SerializeField] private Transform _forwardCollisionDetector;
     [SerializeField] private Transform _downwardCollisionDetector;
@@ -16,9 +15,12 @@ public class Enemy : MonoBehaviour, IHealth
     [SerializeField] private Transform _shootPosition;
     [SerializeField][Tooltip("Tiros por segundo")] private float _fireRate = 2;
     [SerializeField] private Projectile _projectile;
+    [SerializeField] private AudioSource _shootAudio;
 
     [Header("Health")]
     [SerializeField] private int _maxHealth = 10;
+    [SerializeField] private FlashOnHit _flashEffect;
+
     [Header("Debug")]
     [SerializeField] private int _currentHealth = 0;
 
@@ -43,7 +45,11 @@ public class Enemy : MonoBehaviour, IHealth
             createFunc: () =>
             {
                 Projectile projectile = Instantiate(_projectile);
-                projectile.Init(onRelease: (Projectile projectile) => _projectilePool.Release(projectile));
+                projectile.Init(onRelease: (Projectile projectile) =>
+                {
+                    if (projectile.isActiveAndEnabled)
+                        _projectilePool.Release(projectile);
+                });
 
                 return projectile;
             }, actionOnGet: (Projectile projectile) =>
@@ -127,6 +133,7 @@ public class Enemy : MonoBehaviour, IHealth
 
             _shootPosition.eulerAngles = gunEulerAngles;
             _projectilePool.Get();
+            _shootAudio.Play();
             yield return new WaitForSeconds(1 / _fireRate);
         }
     }
@@ -135,6 +142,7 @@ public class Enemy : MonoBehaviour, IHealth
 
     public void TakeDamage(int damage)
     {
+        _flashEffect.Flash();
         _currentHealth = Mathf.Max(_currentHealth - damage, 0);
 
         if (_currentHealth == 0)
@@ -145,6 +153,7 @@ public class Enemy : MonoBehaviour, IHealth
 
     public void OnDeath()
     {
+        _player.EnergyComp.RestoreEnergy(5);
         Destroy(gameObject);
     }
 
