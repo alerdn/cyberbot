@@ -11,6 +11,7 @@ public class InputReader : ScriptableObject, IPlayerActions
     public event Action<bool> HealEvent;
     public event Action<bool> ShootEvent;
     public event Action JumpEvent;
+    public event Action ActivateShieldEvent;
 
     public Vector2 MovementValue { get; private set; }
     public Vector2 AimValue { get; private set; }
@@ -68,5 +69,12 @@ public class InputReader : ScriptableObject, IPlayerActions
         {
             HealEvent?.Invoke(false);
         }
+    }
+
+    public void OnActivateShield(InputAction.CallbackContext context)
+    {
+        if (!context.performed) return;
+
+        ActivateShieldEvent?.Invoke();
     }
 }

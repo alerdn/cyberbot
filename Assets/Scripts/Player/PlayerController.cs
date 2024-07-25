@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
         _input.ShootEvent += OnShoot;
         _input.JumpEvent += OnJump;
         _input.HealEvent += OnHeal;
+        _input.ActivateShieldEvent += OnActivateShield;
 
         _gravityScale = _rb.gravityScale;
     }
@@ -76,6 +77,7 @@ public class PlayerController : MonoBehaviour
         _input.ShootEvent -= OnShoot;
         _input.JumpEvent -= OnJump;
         _input.HealEvent -= OnHeal;
+        _input.ActivateShieldEvent -= OnActivateShield;
     }
 
     private void Update()
@@ -185,5 +187,10 @@ public class PlayerController : MonoBehaviour
     private void OnHeal(bool isHealing)
     {
         _energyComp.Heal(isHealing);
+    }
+
+    private void OnActivateShield()
+    {
+        EnergyComp.ActivateShield();
     }
 }

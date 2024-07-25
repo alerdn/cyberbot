@@ -55,16 +55,17 @@ MonoBehaviour:
   _input: {fileID: 11400000, guid: a6b53bc6846d87445b56b527a19ee365, type: 2}
   _energyComp: {fileID: 8819527261429799153}
   _gun: {fileID: 0}
-  _gunFollowDelay: 25
+  _gunFollowSpeed: 25
   _holderPosition: {fileID: 2354639373061863399}
   _animator: {fileID: 6166192814485789090}
   _moveSpeed: 15
   _acceleration: 120
   _deceleration: 90
-  _jumpForce: 25
+  _jumpForce: 30
   _coyoteJumpTime: 0.15
   _grounded: 0
   _canCoyoteJump: 0
+  _gravityScale: 0
 --- !u!114 &8819527261429799153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,11 +78,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 835dda3d6d8cdaf4abe71aeca833648d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _lifeBarImage: {fileID: 0}
+  _energyBarImage: {fileID: 0}
+  _shieldBarImage: {fileID: 0}
   _maxHealth: 100
   _maxEnergy: 100
+  _maxShield: 50
   _healingRate: 10
+  _shieldRestorationMultiplier: 2
+  _shieldCoolDown: 5
   _currentHealth: 0
   _currentEnergy: 0
+  _currentShield: 0
 --- !u!50 &9149792598391943893
 Rigidbody2D:
   serializedVersion: 4
