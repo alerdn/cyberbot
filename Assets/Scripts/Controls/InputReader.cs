@@ -12,6 +12,7 @@ public class InputReader : ScriptableObject, IPlayerActions
     public event Action<bool> ShootEvent;
     public event Action JumpEvent;
     public event Action ActivateShieldEvent;
+    public event Action PauseEvent;
 
     public Vector2 MovementValue { get; private set; }
     public Vector2 AimValue { get; private set; }
@@ -76,5 +77,12 @@ public class InputReader : ScriptableObject, IPlayerActions
         if (!context.performed) return;
 
         ActivateShieldEvent?.Invoke();
+    }
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (!context.performed) return;
+
+        PauseEvent?.Invoke();
     }
 }

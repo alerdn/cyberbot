@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -68,6 +67,7 @@ public class PlayerController : MonoBehaviour
         _input.JumpEvent += OnJump;
         _input.HealEvent += OnHeal;
         _input.ActivateShieldEvent += OnActivateShield;
+        _input.PauseEvent += OnPause;
 
         _gravityScale = _rb.gravityScale;
     }
@@ -78,20 +78,30 @@ public class PlayerController : MonoBehaviour
         _input.JumpEvent -= OnJump;
         _input.HealEvent -= OnHeal;
         _input.ActivateShieldEvent -= OnActivateShield;
+        _input.PauseEvent -= OnPause;
     }
 
     private void Update()
     {
+        if (MenuPause.Instance.IsPaused) return;
+
         _time += Time.deltaTime;
         Aim();
     }
 
     private void FixedUpdate()
     {
+        if (MenuPause.Instance.IsPaused) return;
+
         CheckCollisions();
         Move();
 
         _gun.transform.position = Vector3.Lerp(_gun.transform.position, _holderPosition.position, _gunFollowSpeed * Time.fixedDeltaTime);
+    }
+
+    private void OnPause()
+    {
+        MenuPause.Instance.Pause();
     }
 
     private void CheckCollisions()

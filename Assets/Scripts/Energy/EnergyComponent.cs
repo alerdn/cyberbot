@@ -3,6 +3,7 @@ using DG.Tweening;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EnergyComponent : MonoBehaviour, IHealth
@@ -90,6 +91,8 @@ public class EnergyComponent : MonoBehaviour, IHealth
 
     public void TakeDamage(int damage)
     {
+        if (CurrentHealth == 0) return;
+
         if (IsShieldActivated)
         {
             CurrentShield = Mathf.Max(CurrentShield - damage, 0);
@@ -117,7 +120,13 @@ public class EnergyComponent : MonoBehaviour, IHealth
 
     public void OnDeath()
     {
-        Debug.Log("Player morrey");
+        StartCoroutine(DeathRoutine());
+    }
+
+    private IEnumerator DeathRoutine()
+    {
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void Heal(bool isHealing)

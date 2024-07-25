@@ -206,11 +206,12 @@ public class BossBattleState : BossStateBase
     {
         while (true)
         {
+            yield return new WaitForSeconds(_attackDelay);
+
             Ability ability = _abilities.GetRandom();
             Debug.Log("Usando ability");
             yield return ability.Use();
             Debug.Log("Usou ability");
-            yield return new WaitForSeconds(_attackDelay);
         }
     }
 }
