@@ -29,7 +29,7 @@ public class Projectile : MonoBehaviour
 
         if (_currentLifeTime < 0)
         {
-            _releaseCallback(this);
+            _releaseCallback?.Invoke(this);
         }
     }
 

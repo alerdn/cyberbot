@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 1826162056626836661}
   - component: {fileID: 2054513535461832281}
   m_Layer: 10
-  m_Name: Projectile
+  m_Name: EnemyProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,8 +131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b2f9f6c4e7d2a499d205817c32babf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 100
-  _lifeTime: 1
+  _speed: 20
+  _lifeTime: 5
 --- !u!70 &1826162056626836661
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -148,7 +148,7 @@ CapsuleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1088
+    m_Bits: 1536
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
