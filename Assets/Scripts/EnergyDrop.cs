@@ -20,6 +20,6 @@ public class EnergyDrop : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.position = Vector2.Lerp(transform.position, PlayerController.Instance.transform.position, 10 * Time.fixedDeltaTime);
+        transform.position = Vector2.Lerp(transform.position, PlayerController.Instance.transform.position, 5 * Time.fixedDeltaTime);
     }
 }
