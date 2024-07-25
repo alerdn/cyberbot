@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour
         CheckCollisions();
         Move();
 
-        _gun.transform.position = Vector3.Lerp(_gun.transform.position, _holderPosition.position, _gunFollowSpeed * _time);
+        _gun.transform.position = Vector3.Lerp(_gun.transform.position, _holderPosition.position, _gunFollowSpeed * Time.fixedDeltaTime);
     }
 
     private void CheckCollisions()

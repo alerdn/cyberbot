@@ -27,6 +27,8 @@ public class Boss : MonoBehaviour, IHealth
     [Header("Health")]
     [SerializeField] private int _maxHealth = 300;
     [SerializeField] private FlashOnHit _flashEffect;
+    [SerializeField] private EnergyDrop _energyDropPrefab;
+    [SerializeField] private float _energyDropChance;
 
     [Header("Components")]
     [SerializeField] private BossHand _leftHand;
@@ -73,6 +75,11 @@ public class Boss : MonoBehaviour, IHealth
         _flashEffect.Flash();
         _currentHealth = Mathf.Max(_currentHealth - damage, 0);
         UpdateUI();
+
+        if (Random.Range(0f, 10f) < _energyDropChance)
+        {
+            Instantiate(_energyDropPrefab, transform.position, Quaternion.identity);
+        }
 
         if (_currentHealth == 0)
         {
@@ -215,6 +222,12 @@ public class BossDeathState : BossStateBase
     public override void OnEnter()
     {
         stateMachine.Collider.enabled = false;
+
+        stateMachine.LeftHand.Animator.SetTrigger("Idle");
+        stateMachine.LeftHand.Collider.enabled = false;
+        stateMachine.RightHand.Animator.SetTrigger("Idle");
+        stateMachine.RightHand.Collider.enabled = false;
+
         stateMachine.Animator.SetTrigger("Death");
         stateMachine.ClearEnemies();
     }

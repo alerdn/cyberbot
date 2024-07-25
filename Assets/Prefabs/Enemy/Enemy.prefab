@@ -243,10 +243,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _detectionDistance: 15
-  _attackDistance: 5
   _moveSpeed: 6
   _forwardCollisionDetector: {fileID: 3370067689659292020}
   _downwardCollisionDetector: {fileID: 8960825433952101564}
+  _energyDropPrefab: {fileID: 1179546484608316369, guid: c6705de349e13a740b40ff6d9d19a412, type: 3}
   _shootPosition: {fileID: 5383624081431029206}
   _fireRate: 1
   _projectile: {fileID: 7534236017903035995, guid: 0087447a63775344fa76ed7ff964ea83, type: 3}

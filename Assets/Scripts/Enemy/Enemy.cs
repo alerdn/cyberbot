@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour, IHealth
     [SerializeField] private float _moveSpeed = 1f;
     [SerializeField] private Transform _forwardCollisionDetector;
     [SerializeField] private Transform _downwardCollisionDetector;
+    [SerializeField] private EnergyDrop _energyDropPrefab;
 
     [Header("Gun")]
     [SerializeField] private Transform _shootPosition;
@@ -153,7 +154,7 @@ public class Enemy : MonoBehaviour, IHealth
 
     public void OnDeath()
     {
-        _player.EnergyComp.RestoreEnergy(5);
+        Instantiate(_energyDropPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 
