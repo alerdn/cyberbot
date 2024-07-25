@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
 
+    public EnergyComponent EnergyComp => _energyComp;
+
     [Header("Layers")]
     [Tooltip("Set this to the layer your player is on")]
     [SerializeField] private LayerMask _playerLayer;

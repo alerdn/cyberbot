@@ -1,9 +1,34 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnergyComponent : MonoBehaviour, IHealth
 {
+    public int CurrentHealth
+    {
+        get => _currentHealth;
+        private set
+        {
+            _currentHealth = value;
+            UpdateUI();
+        }
+    }
+
+    public int CurrentEnergy
+    {
+        get => _currentEnergy;
+        private set
+        {
+            _currentEnergy = value;
+            UpdateUI();
+        }
+    }
+
+    [Header("UI")]
+    [SerializeField] private Image _lifeBarImage;
+    [SerializeField] private Image _energyBarImage;
+
     [Header("Stats")]
     [SerializeField] private int _maxHealth;
     [SerializeField] private int _maxEnergy;
@@ -17,17 +42,24 @@ public class EnergyComponent : MonoBehaviour, IHealth
 
     private void Start()
     {
-        _currentHealth = _maxHealth;
-        _currentEnergy = _maxEnergy;
+        CurrentHealth = _maxHealth;
+        CurrentEnergy = _maxEnergy;
+    }
+
+    private void UpdateUI()
+    {
+        _lifeBarImage.fillAmount = (float)CurrentHealth / (float)_maxHealth;
+        _energyBarImage.fillAmount = (float)CurrentEnergy / (float)_maxEnergy;
     }
 
     #region Health
 
     public void TakeDamage(int damage)
     {
-        _currentHealth = Mathf.Max(_currentHealth - damage, 0);
+        CurrentHealth = Mathf.Max(CurrentHealth - damage, 0);
+        UpdateUI();
 
-        if (_currentHealth == 0)
+        if (CurrentHealth == 0)
         {
             OnDeath();
         }
@@ -57,14 +89,14 @@ public class EnergyComponent : MonoBehaviour, IHealth
     {
         while (true)
         {
-            if (_currentEnergy <= 0)
+            if (CurrentEnergy <= 0)
             {
                 _healRoutine = null;
                 yield break;
             }
 
-            _currentEnergy--;
-            _currentHealth = Mathf.Min(_currentHealth + 1, _maxHealth);
+            CurrentEnergy--;
+            CurrentHealth = Mathf.Min(CurrentHealth + 1, _maxHealth);
 
             yield return new WaitForSeconds(1 / _healingRate);
         }
@@ -75,18 +107,18 @@ public class EnergyComponent : MonoBehaviour, IHealth
     #region Energy
     public bool UseEnergy(int amount = 1)
     {
-        if (_currentEnergy < amount)
+        if (CurrentEnergy < amount)
         {
             return false;
         }
 
-        _currentEnergy -= amount;
+        CurrentEnergy -= amount;
         return true;
     }
 
     public void RestoreEnergy(int amount)
     {
-        _currentEnergy = Mathf.Max(_currentEnergy + amount, _maxEnergy);
+        CurrentEnergy = Mathf.Max(CurrentEnergy + amount, _maxEnergy);
     }
 
     #endregion
