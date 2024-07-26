@@ -41,6 +41,7 @@ public class EnergyComponent : MonoBehaviour, IHealth
     public bool IsShieldActivated => CurrentShield > 0;
 
     [Header("UI")]
+    [SerializeField] private GameObject _deathScreen;
     [SerializeField] private Image _lifeBarImage;
     [SerializeField] private Image _energyBarImage;
     [SerializeField] private Image _shieldBarImage;
@@ -78,6 +79,7 @@ public class EnergyComponent : MonoBehaviour, IHealth
         CurrentHealth = _maxHealth;
         CurrentEnergy = _maxEnergy;
         CurrentShield = 0;
+        _deathScreen.SetActive(false);
     }
 
     private void UpdateUI()
@@ -120,12 +122,13 @@ public class EnergyComponent : MonoBehaviour, IHealth
 
     public void OnDeath()
     {
+        _deathScreen.SetActive(true);
         StartCoroutine(DeathRoutine());
     }
 
     private IEnumerator DeathRoutine()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

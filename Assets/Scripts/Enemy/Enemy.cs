@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.Pool;
 
 public class Enemy : MonoBehaviour, IHealth
 {
+    public event Action<Enemy> OnDeathEvent;
+
     [Header("Behaviour")]
     [SerializeField] private float _detectionDistance = 10f;
     [SerializeField] private float _moveSpeed = 1f;
@@ -109,6 +112,7 @@ public class Enemy : MonoBehaviour, IHealth
         }
         else
         {
+            _rb.velocity = Vector3.zero;
             _shootRoutine ??= StartCoroutine(ShootRoutine());
         }
     }
@@ -155,6 +159,7 @@ public class Enemy : MonoBehaviour, IHealth
     public void OnDeath()
     {
         Instantiate(_energyDropPrefab, transform.position, Quaternion.identity);
+        OnDeathEvent?.Invoke(this);
         Destroy(gameObject);
     }
 

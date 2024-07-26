@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -72,6 +73,8 @@ public class Boss : MonoBehaviour, IHealth
 
     public void TakeDamage(int damage)
     {
+        if (_currentHealth == 0) return;
+
         _flashEffect.Flash();
         _currentHealth = Mathf.Max(_currentHealth - damage, 0);
         UpdateUI();
@@ -218,6 +221,8 @@ public class BossBattleState : BossStateBase
 
 public class BossDeathState : BossStateBase
 {
+    float _time;
+
     public BossDeathState(Boss stateMachine) : base(stateMachine) { }
 
     public override void OnEnter()
@@ -233,7 +238,15 @@ public class BossDeathState : BossStateBase
         stateMachine.ClearEnemies();
     }
 
-    public override void OnTick(float deltaTime) { }
+    public override void OnTick(float deltaTime)
+    {
+        _time += deltaTime;
+
+        if (_time >= 5f)
+        {
+            SceneManager.LoadScene(0);
+        }
+    }
 
     public override void OnExit() { }
 }

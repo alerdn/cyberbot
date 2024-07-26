@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class EnemyGenerator : MonoBehaviour
 {
-    public List<Enemy> Enemies { get; private set; }
+    [field: SerializeField] public List<Enemy> Enemies { get; private set; }
 
     [SerializeField] private Enemy _enemyPrefab;
     [SerializeField] private AnimationCurve _spawnAmountCurve;
     [SerializeField] private float _waveDuration = 15f;
+    [SerializeField] private int _maxEnemies = 10;
     [SerializeField] private List<Transform> _spawnPoints;
 
     private int _waveIndex;
@@ -40,10 +41,13 @@ public class EnemyGenerator : MonoBehaviour
         _waveIndex++;
         int spawnAmount = Mathf.RoundToInt(_spawnAmountCurve.Evaluate(_waveIndex));
 
+        spawnAmount = Mathf.Min(_maxEnemies - Enemies.Count, spawnAmount);
+
         for (int i = 0; i < spawnAmount; i++)
         {
             Transform spawnPoint = _spawnPoints.GetRandom();
             Enemy enemy = Instantiate(_enemyPrefab, spawnPoint.position, Quaternion.identity, transform);
+            enemy.OnDeathEvent += (enemy) => Enemies.Remove(enemy);
             Enemies.Add(enemy);
         }
     }

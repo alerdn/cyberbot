@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (MenuPause.Instance.IsPaused) return;
+        if (MenuPause.Instance.IsPaused || EnergyComp.CurrentHealth == 0) return;
 
         _time += Time.deltaTime;
         Aim();
@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (MenuPause.Instance.IsPaused) return;
+        if (MenuPause.Instance.IsPaused || EnergyComp.CurrentHealth == 0) return;
 
         CheckCollisions();
         Move();
