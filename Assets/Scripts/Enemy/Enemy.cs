@@ -81,38 +81,37 @@ public class Enemy : MonoBehaviour, IHealth
 
     private void FixedUpdate()
     {
-        if (!_hasNoticedPlayer)
+
+        RaycastHit2D hitForward = Physics2D.Raycast(_forwardCollisionDetector.position, transform.right, 1f, LayerMask.GetMask("Wall"));
+        Debug.DrawRay(_forwardCollisionDetector.position, transform.right, Color.red);
+        if (hitForward)
         {
-            RaycastHit2D hitForward = Physics2D.Raycast(_forwardCollisionDetector.position, transform.right, 1f, LayerMask.GetMask("Wall"));
-            Debug.DrawRay(_forwardCollisionDetector.position, transform.right, Color.red);
-            if (hitForward)
-            {
-                // Bateu na parede
-                direction *= -1;
-            }
+            // Bateu na parede
+            direction *= -1;
+        }
 
-            RaycastHit2D hitDownward = Physics2D.Raycast(_downwardCollisionDetector.position, Vector2.down, 1f, LayerMask.GetMask("Ground"));
-            Debug.DrawRay(_downwardCollisionDetector.position, Vector2.down, Color.red);
-            if (!hitDownward)
-            {
-                // Prestes a sair da plataforma
-                direction *= -1;
-            }
+        RaycastHit2D hitDownward = Physics2D.Raycast(_downwardCollisionDetector.position, Vector2.down, 1f, LayerMask.GetMask("Ground"));
+        Debug.DrawRay(_downwardCollisionDetector.position, Vector2.down, Color.red);
+        if (!hitDownward)
+        {
+            // Prestes a sair da plataforma
+            direction *= -1;
+        }
 
-            if (direction == 1)
-            {
-                transform.eulerAngles = Vector3.zero;
-            }
-            else
-            {
-                transform.eulerAngles = new Vector3(0f, 180f, 0f);
-            }
-
-            _rb.velocity = new Vector2(direction * _moveSpeed, _rb.velocity.y);
+        if (direction == 1)
+        {
+            transform.eulerAngles = Vector3.zero;
         }
         else
         {
-            _rb.velocity = Vector3.zero;
+            transform.eulerAngles = new Vector3(0f, 180f, 0f);
+        }
+
+        _rb.velocity = new Vector2(direction * _moveSpeed, _rb.velocity.y);
+
+
+        if (_hasNoticedPlayer)
+        {
             _shootRoutine ??= StartCoroutine(ShootRoutine());
         }
     }
