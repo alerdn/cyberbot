@@ -76,7 +76,7 @@ public class EnergyComponent : MonoBehaviour, IHealth
 
     private void Start()
     {
-        CurrentHealth = _maxHealth;
+        CurrentHealth = CurrentHealth == 0 ? _maxHealth : CurrentHealth;
         CurrentEnergy = _maxEnergy;
         CurrentShield = 0;
         _deathScreen.SetActive(false);

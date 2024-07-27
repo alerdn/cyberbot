@@ -8950,10 +8950,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss
       objectReference: {fileID: 0}
-    - target: {fileID: 927511700676150044, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
-      propertyPath: _damage
-      value: 15
-      objectReference: {fileID: 0}
+    - target: {fileID: 771777413647982070, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 519420031}
     - target: {fileID: 2126599928579744206, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
       propertyPath: m_Camera
       value: 
@@ -8998,9 +8998,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3704732673254926474, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
-      propertyPath: _maxHealth
-      value: 300
+    - target: {fileID: 3456720773190257907, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
+      propertyPath: m_Size.x
+      value: 4.830131
+      objectReference: {fileID: 0}
+    - target: {fileID: 3456720773190257907, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
+      propertyPath: m_Size.y
+      value: 6.1614466
+      objectReference: {fileID: 0}
+    - target: {fileID: 3456720773190257907, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3456720773190257907, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
+      propertyPath: m_Offset.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3704732673254926474, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
       propertyPath: _enemyGenerator
@@ -9022,9 +9034,37 @@ PrefabInstance:
       propertyPath: _platforms.Array.data[3].Platform
       value: 
       objectReference: {fileID: 2080701178}
-    - target: {fileID: 7724840181567680706, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
-      propertyPath: _damage
-      value: 15
+    - target: {fileID: 4570784475474008502, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5021442954803793124, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 519420031}
+    - target: {fileID: 7630335794843720463, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7630335794843720463, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688118266044123211, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
+      propertyPath: m_Size.x
+      value: 5.0750685
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688118266044123211, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
+      propertyPath: m_Size.y
+      value: 6.2820396
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688118266044123211, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.015944958
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688118266044123211, guid: 22d90d8325a89734ba654bd7c064d399, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.01594448
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
