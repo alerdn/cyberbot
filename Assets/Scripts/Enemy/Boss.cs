@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -21,6 +22,9 @@ public class Boss : MonoBehaviour, IHealth
     public BossHand LeftHand => _leftHand;
     public BossHand RightHand => _rightHand;
     public Collider2D Collider => _collider;
+
+    [Header("Event")]
+    [SerializeField] private UnityEvent _onDeath;
 
     [Header("UI")]
     [SerializeField] private Image _lifeBarImage;
@@ -92,6 +96,7 @@ public class Boss : MonoBehaviour, IHealth
 
     public void OnDeath()
     {
+        _onDeath?.Invoke();
         SwitchState(new BossDeathState(this));
     }
 
@@ -240,12 +245,12 @@ public class BossDeathState : BossStateBase
 
     public override void OnTick(float deltaTime)
     {
-        _time += deltaTime;
+        // _time += deltaTime;
 
-        if (_time >= 5f)
-        {
-            SceneManager.LoadScene(0);
-        }
+        // if (_time >= 5f)
+        // {
+        //     SceneManager.LoadScene(0);
+        // }
     }
 
     public override void OnExit() { }
