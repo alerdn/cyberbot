@@ -183,7 +183,7 @@ public class BossBattleState : BossStateBase
     public override void OnTick(float deltaTime)
     {
         // Phase Control
-        if (_phaseIndex == 1 && stateMachine.CurrentHealthPercentage < 50f)
+        if (_phaseIndex == 1 && stateMachine.CurrentHealthPercentage < 75f)
         {
             _phaseIndex = 2;
 
@@ -217,9 +217,7 @@ public class BossBattleState : BossStateBase
             yield return new WaitForSeconds(_attackDelay);
 
             Ability ability = _abilities.GetRandom();
-            Debug.Log("Usando ability");
             yield return ability.Use();
-            Debug.Log("Usou ability");
         }
     }
 }
