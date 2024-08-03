@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using TMPro;
@@ -69,6 +70,7 @@ public class EnergyComponent : MonoBehaviour, IHealth
     [SerializeField] private int _currentHealth;
     [SerializeField] private int _currentEnergy;
     [SerializeField] private int _currentShield;
+    [SerializeField] private Armor _currentArmor;
 
     private Coroutine _healRoutine;
     private bool _canActivateShield = true;
@@ -87,6 +89,8 @@ public class EnergyComponent : MonoBehaviour, IHealth
         _lifeBarImage.fillAmount = (float)CurrentHealth / (float)_maxHealth;
         _energyBarImage.fillAmount = (float)CurrentEnergy / (float)_maxEnergy;
         _shieldBarImage.fillAmount = (float)CurrentShield / (float)_maxShield;
+
+        _currentArmor?.UpdateUI();
     }
 
     #region Health
@@ -105,6 +109,13 @@ public class EnergyComponent : MonoBehaviour, IHealth
             {
                 DeactiveShield();
             }
+
+            return;
+        }
+
+        if (_currentArmor)
+        {
+            _currentArmor.TakeDamage(damage);
 
             return;
         }
@@ -227,6 +238,25 @@ public class EnergyComponent : MonoBehaviour, IHealth
         yield return DOTween.To(() => int.Parse(_shieldCooldownText.text), (v) => _shieldCooldownText.text = v.ToString(), 0, _shieldCoolDown).WaitForCompletion();
         _shieldCooldownText.text = "Q";
         _canActivateShield = true;
+    }
+
+    #endregion
+
+    #region Armor
+
+    public bool ActivateArmor(Armor armor)
+    {
+        if (_currentArmor) return false;
+
+        _currentArmor = armor;
+        _currentArmor.OnDeathEvent += DeactiveArmor;
+
+        return true;
+    }
+
+    private void DeactiveArmor()
+    {
+        _currentArmor = null;
     }
 
     #endregion

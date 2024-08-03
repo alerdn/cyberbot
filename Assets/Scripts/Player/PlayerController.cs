@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance;
 
     public EnergyComponent EnergyComp => _energyComp;
+    public bool CanCoyoteJump => _canCoyoteJump && _time < _timeLeftGround + _coyoteJumpTime;
 
     [Header("Layers")]
     [Tooltip("Set this to the layer your player is on")]
@@ -41,8 +42,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool _grounded;
     [SerializeField] private bool _canCoyoteJump;
     [SerializeField] private float _gravityScale;
-
-    public bool CanCoyoteJump => _canCoyoteJump && _time < _timeLeftGround + _coyoteJumpTime;
 
     private void Awake()
     {
@@ -202,5 +201,17 @@ public class PlayerController : MonoBehaviour
     private void OnActivateShield()
     {
         EnergyComp.ActivateShield();
+    }
+
+    public bool EquipArmor(Armor armor)
+    {
+        if (EnergyComp.ActivateArmor(armor))
+        {
+            armor.transform.parent = transform;
+            armor.transform.localPosition = armor.SocketOffset.localPosition;
+            return true;
+        }
+
+        return false;
     }
 }
